@@ -50,9 +50,16 @@ public class ActionBarManager extends BukkitRunnable {
 
 
   public ActionBarManager(PluginMain plugin) {
-    this.plugin = plugin;
-    runTaskTimer(plugin, 0L, period);
+      this.plugin = plugin;
+      if (Bukkit.getGlobalRegionScheduler() != null) {
+          // Use Folia's scheduler (make sure you import java.util.concurrent.TimeUnit)
+          Bukkit.getGlobalRegionScheduler().runTaskTimer(plugin, this, 0L, period, TimeUnit.TICKS);
+      } else {
+          // Fallback for non-Folia servers
+          runTaskTimer(plugin, 0L, period);
+      }
   }
+
 
   @SuppressWarnings("deprecation")
   @Override
